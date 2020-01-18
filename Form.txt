@@ -1,0 +1,68 @@
+'Identifica o tipo do objeto e insere se for um dos tipos definidos
+Private Sub lsInserir(ByRef lTextBox As Variant, ByVal Plan1 As String, ByVal lColunaCodigo As Long, ByVal lUltimaLinha As Long)
+    If (TypeOf lTextBox Is MSForms.TextBox) Or (TypeOf lTextBox Is MSForms.ComboBox) Then
+        Sheets(Plan1).Range(lTextBox.Tag & lUltimaLinha).Value = lTextBox.Text
+    Else
+        If TypeOf lTextBox Is MSForms.OptionButton Then
+            If lTextBox.Value = True Then
+                Sheets(Plan1).Range(lTextBox.Tag & lUltimaLinha).Value = lTextBox.Caption
+            End If
+        End If
+    End If
+End Sub
+
+'Loop por todos os componentes da tela
+'frmProntuario = Nome do UserForm atual
+'Plan1 = Nome da planilha aonde irão ser inseridos os valores
+'lColunaCodigo = Coluna de referência para a inserção dos dados
+Public Function lsInserirTextBox(frmProntuario As UserForm, ByVal Plan1 As String, ByVal lColunaCodigo As Long)
+    Dim controle            As Control
+    Dim lUltimaLinhaAtiva   As Long
+    
+    lUltimaLinhaAtiva = Worksheets(Plan1).Cells(Worksheets(Plan1).Rows.Count, lColunaCodigo).End(xlUp).Row + 1
+    
+    For Each controle In frmProntuario.Controls
+        lsInserir controle, Plan1, lColunaCodigo, lUltimaLinhaAtiva
+    Next
+End Function
+
+'Limpa todos os objetos TextBox da tela
+Public Function lsLimparTextBox(frmProntuario As UserForm)
+    Dim controle            As Control
+    
+    For Each controle In frmProntuario.Controls
+        If TypeOf controle Is MSForms.TextBox Then
+            controle.Text = ""
+        End If
+    Next
+End Function
+
+'Aciona o botão de limpar
+Private Sub CommandButton1_Click()
+    lsLimparTextBox frmProntuario
+    
+    TextBox1.SetFocus
+End Sub
+
+'Aciona o botão de inserir
+Private Sub CommandButton2_Click()
+    lsInserirTextBox frmProntuario, "PRONTUARIO", 2
+    
+    lsLimparTextBox frmProntuario
+    
+    TextBox1.SetFocus
+End Sub
+
+Private Sub TextBox1_Change()
+    TextBox1 = UCase(TextBox1)
+    'Ucase = Upper case
+End Sub
+
+Private Sub TextBox2_Change()
+    TextBox2 = UCase(TextBox2) 'Ucase = Upper case
+End Sub
+
+Private Sub TextBox3_Change()
+    TextBox3 = UCase(TextBox3)
+    'Ucase = Upper case
+End Sub

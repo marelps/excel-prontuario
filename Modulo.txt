@@ -1,0 +1,3 @@
+Sub ChamarFormProntuario()
+    frmProntuario.Show
+End Sub
